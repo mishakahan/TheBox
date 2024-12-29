@@ -3,16 +3,38 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, ChevronRight, Sparkles } from 'lucide-react';
 
-const IdeaCard = ({ idea }: { idea: string }) => (
-  <Card className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-    <p className="text-gray-700">{idea}</p>
-  </Card>
-);
+interface IdeaWithDetails {
+  title: string;
+  content: string;
+  fullContent: string;
+}
+
+const IdeaCard = ({ idea }: { idea: IdeaWithDetails }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <Card className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <h4 className="font-bold mb-2">{idea.title}</h4>
+      <p className="text-gray-700">
+        {expanded ? idea.fullContent : idea.content}
+      </p>
+      {idea.fullContent !== idea.content && (
+        <Button 
+          variant="ghost" 
+          onClick={() => setExpanded(!expanded)}
+          className="text-blue-600 hover:text-blue-800 mt-2 p-0 h-auto"
+        >
+          {expanded ? 'Read less' : 'Read more'}
+        </Button>
+      )}
+    </Card>
+  );
+};
 
 interface OpportunityCardProps {
   title: string;
   description: string;
-  ideas: string[];
+  ideas: IdeaWithDetails[];
   index: number;
 }
 
@@ -41,30 +63,20 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({ title, description, i
 
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-3">
-                {ideas.slice(0, 3).map((idea, idx) => (
+                {ideas.slice(0, expanded ? undefined : 3).map((idea, idx) => (
                   <IdeaCard key={idx} idea={idea} />
                 ))}
               </div>
 
               {ideas.length > 3 && (
-                <div>
-                  <Button 
-                    variant="ghost" 
-                    onClick={() => setExpanded(!expanded)}
-                    className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mt-3"
-                  >
-                    {expanded ? 'Show less' : 'See more ideas'}
-                    <ChevronRight className={`transform transition-transform ${expanded ? 'rotate-90' : ''}`} />
-                  </Button>
-
-                  {expanded && (
-                    <div className="grid grid-cols-1 gap-3 mt-4">
-                      {ideas.slice(3).map((idea, idx) => (
-                        <IdeaCard key={idx + 3} idea={idea} />
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setExpanded(!expanded)}
+                  className="text-blue-600 hover:text-blue-800 flex items-center gap-2"
+                >
+                  {expanded ? 'Show less' : 'See more ideas'}
+                  <ChevronRight className={`transform transition-transform ${expanded ? 'rotate-90' : ''}`} />
+                </Button>
               )}
             </div>
           </CardContent>
@@ -105,44 +117,124 @@ const OpportunitiesView = () => {
       title: "Tech-Enhanced Taste: Personalized Gelato Experiences",
       description: "Leverage technology to personalize gelato offerings, enhance production efficiency, and create immersive customer experiences both in-store and online.",
       ideas: [
-        "AI Flavor Matchmaker App: Develop an app that recommends gelato flavors based on individual taste profiles and dietary preferences.",
-        "Interactive In-Store Tablets: Install kiosks where customers can customize their gelato orders digitally.",
-        "Virtual Gelato Workshops: Host online classes teaching gelato-making techniques.",
-        "Augmented Reality (AR) Packaging: Use AR to allow customers to scan packaging and learn about ingredient origins.",
-        "Smart Production Systems: Implement AI-driven analytics to optimize recipes."
+        {
+          title: "AI Flavor Matchmaker App",
+          content: "Develop an app that recommends gelato flavors based on individual taste profiles...",
+          fullContent: "Develop an app that recommends gelato flavors based on individual taste profiles and dietary preferences. The app will use machine learning to analyze user preferences and create personalized flavor suggestions."
+        },
+        {
+          title: "Interactive In-Store Tablets",
+          content: "Install kiosks where customers can customize their gelato orders digitally...",
+          fullContent: "Install kiosks where customers can customize their gelato orders digitally. These tablets will feature an intuitive interface for flavor exploration, nutritional information, and custom combination suggestions."
+        },
+        {
+          title: "Virtual Gelato Workshops",
+          content: "Host online classes teaching gelato-making techniques...",
+          fullContent: "Host online classes teaching gelato-making techniques. These interactive sessions will cover traditional methods, modern innovations, and tips for creating perfect gelato at home."
+        },
+        {
+          title: "AR Packaging Experience",
+          content: "Use AR to allow customers to scan packaging and learn about ingredient origins...",
+          fullContent: "Use AR to allow customers to scan packaging and learn about ingredient origins. This interactive experience will showcase the sourcing journey, nutritional facts, and suggest flavor pairings."
+        },
+        {
+          title: "Smart Production Systems",
+          content: "Implement AI-driven analytics to optimize recipes...",
+          fullContent: "Implement AI-driven analytics to optimize recipes and production processes. This system will analyze customer preferences, seasonal trends, and inventory data to improve efficiency and reduce waste."
+        }
       ]
     },
     {
       title: "Tradition Reinvented: Classic Flavors, Healthier Choices",
       description: "Reimagine traditional Italian gelato flavors using plant-based and low-sugar ingredients, preserving the authentic taste and texture that appeals to both traditionalists and health-conscious consumers.",
       ideas: [
-        "Nonna's Pistachio Reborn: A plant-based, low-sugar version of classic pistachio gelato.",
-        "Dairy-Free Stracciatella: Recreate the beloved chocolate chip gelato using almond milk.",
-        "Heritage Hazelnut Delight: A lactose-free hazelnut gelato.",
-        "Sugar-Conscious Tiramisu Gelato: A low-sugar take on the classic Italian dessert.",
-        "Classic Lemon Zest Sorbetto: An all-natural, plant-based lemon sorbet."
+        {
+          title: "Nonna's Pistachio Reborn",
+          content: "A plant-based, low-sugar version of classic pistachio gelato...",
+          fullContent: "A plant-based, low-sugar version of classic pistachio gelato that maintains the rich, creamy texture using innovative natural ingredients and sweeteners."
+        },
+        {
+          title: "Dairy-Free Stracciatella",
+          content: "Recreate the beloved chocolate chip gelato using almond milk...",
+          fullContent: "Recreate the beloved chocolate chip gelato using almond milk base, with specially formulated dairy-free chocolate that maintains the signature 'stracciatella' texture."
+        },
+        {
+          title: "Heritage Hazelnut Delight",
+          content: "A lactose-free hazelnut gelato...",
+          fullContent: "A lactose-free hazelnut gelato that celebrates traditional Italian flavors while catering to modern dietary needs. Made with premium Italian hazelnuts and dairy alternatives."
+        },
+        {
+          title: "Sugar-Conscious Tiramisu",
+          content: "A low-sugar take on the classic Italian dessert...",
+          fullContent: "A low-sugar take on the classic Italian dessert, using natural sweeteners and innovative coffee infusion techniques to maintain authentic flavor profiles."
+        },
+        {
+          title: "Classic Lemon Zest Sorbetto",
+          content: "An all-natural, plant-based lemon sorbet...",
+          fullContent: "An all-natural, plant-based lemon sorbet made with organic citrus and natural sweeteners, capturing the essence of traditional Italian sorbetto."
+        }
       ]
     },
     {
       title: "Functional Indulgence: Gelato That Nourishes",
       description: "Introduce gelato infused with functional ingredients like probiotics, antioxidants, and superfoods, offering health benefits beyond basic nutrition while delivering indulgent taste.",
       ideas: [
-        "Antioxidant Berry Boost Gelato: A plant-based gelato made with acai berries and blueberries.",
-        "Probiotic Passion Fruit Gelato: Incorporate gut-friendly probiotics into tropical flavors.",
-        "Matcha Green Tea Fusion: A gelato blending matcha with almond milk.",
-        "Turmeric Ginger Glow: An anti-inflammatory gelato with coconut milk.",
-        "Chia Seed and Mango Medley: A refreshing gelato with omega-3-rich chia seeds."
+        {
+          title: "Antioxidant Berry Boost Gelato",
+          content: "A plant-based gelato made with acai berries and blueberries...",
+          fullContent: "A plant-based gelato made with acai berries and blueberries, rich in antioxidants for a boost of flavor and health benefits."
+        },
+        {
+          title: "Probiotic Passion Fruit Gelato",
+          content: "Incorporate gut-friendly probiotics into tropical flavors...",
+          fullContent: "Incorporate gut-friendly probiotics into tropical flavors for a delicious and healthy treat. The probiotics contribute to digestive well-being."
+        },
+        {
+          title: "Matcha Green Tea Fusion",
+          content: "A gelato blending matcha with almond milk...",
+          fullContent: "A gelato blending matcha with almond milk for a subtly sweet and earthy flavor, packed with antioxidants."
+        },
+        {
+          title: "Turmeric Ginger Glow",
+          content: "An anti-inflammatory gelato with coconut milk...",
+          fullContent: "An anti-inflammatory gelato with coconut milk, combining the warming spices of turmeric and ginger for a unique flavor experience."
+        },
+        {
+          title: "Chia Seed and Mango Medley",
+          content: "A refreshing gelato with omega-3-rich chia seeds...",
+          fullContent: "A refreshing gelato with omega-3-rich chia seeds and sweet mango for a healthy and flavorful delight."
+        }
       ]
     },
     {
       title: "Sustainable Scoop: Ethical Gelato Without the Premium Price",
       description: "Adopt sustainable production and packaging practices to produce eco-friendly gelato options that do not significantly increase costs for consumers.",
       ideas: [
-        "Eco-Packaging Initiative: Transition to biodegradable cups and spoons.",
-        "Local Farm Partnerships: Source ingredients from nearby farms.",
-        "Solar-Powered Production: Invest in renewable energy for facilities.",
-        "Upcycled Ingredient Line: Create flavors using upcycled fruits and nuts.",
-        "Transparency Labels: Detail the sustainable journey of each product."
+        {
+          title: "Eco-Packaging Initiative",
+          content: "Transition to biodegradable cups and spoons...",
+          fullContent: "Transition to biodegradable cups and spoons, reducing environmental impact without compromising on quality or convenience."
+        },
+        {
+          title: "Local Farm Partnerships",
+          content: "Source ingredients from nearby farms...",
+          fullContent: "Source ingredients from nearby farms, supporting local communities and reducing transportation emissions."
+        },
+        {
+          title: "Solar-Powered Production",
+          content: "Invest in renewable energy for facilities...",
+          fullContent: "Invest in renewable energy for facilities, reducing carbon footprint and promoting sustainable practices."
+        },
+        {
+          title: "Upcycled Ingredient Line",
+          content: "Create flavors using upcycled fruits and nuts...",
+          fullContent: "Create flavors using upcycled fruits and nuts, minimizing waste and promoting resource efficiency."
+        },
+        {
+          title: "Transparency Labels",
+          content: "Detail the sustainable journey of each product...",
+          fullContent: "Detail the sustainable journey of each product, increasing consumer awareness and promoting responsible consumption."
+        }
       ]
     }
   ];

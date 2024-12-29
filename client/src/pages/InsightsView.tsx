@@ -184,6 +184,10 @@ const InsightsView = () => {
     </Dialog>
   );
 
+  const navigateToOpportunities = () => {
+    setLocation('/opportunities');
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">Insights</h1>
@@ -211,7 +215,7 @@ const InsightsView = () => {
               {selectedCards.keyInsights.size === keyInsights.length ? 'Deselect All' : 'Select All'}
             </button>
             <button 
-              onClick={() => setLocation('/opportunities')}
+              onClick={navigateToOpportunities}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Generate Opportunities
@@ -320,7 +324,7 @@ const InsightsView = () => {
 
       <div className="flex justify-center mt-8 mb-4">
         <button 
-          onClick={() => setLocation('/opportunities')}
+          onClick={navigateToOpportunities}
           className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           Generate Opportunities
