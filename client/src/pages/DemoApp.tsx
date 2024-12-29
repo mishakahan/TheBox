@@ -105,9 +105,17 @@ const DemoApp = () => {
       <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-gray-100 rounded">
         <Menu size={24} />
       </button>
-      <h1 className="ml-4 text-xl font-semibold">
-        <span className="italic">TheBox</span> <span className="text-gray-500">by Quartz Labs</span>
-      </h1>
+      <div className="flex items-center ml-4">
+        <img 
+          src="/attached_assets/Quartz Logo black.png" 
+          alt="Quartz Logo" 
+          className="h-6 mr-3"
+        />
+        <h1 className="text-xl font-semibold flex items-center">
+          <span className="italic">TheBox</span>
+          <span className="text-gray-500 ml-2">by Quartz Labs</span>
+        </h1>
+      </div>
     </div>
   );
 
@@ -273,7 +281,7 @@ const DemoApp = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {currentPage !== 'login' && <Header />}
+      <Header />
       {currentPage !== 'login' && <Sidebar />}
       <div className={`${currentPage !== 'login' ? 'pt-4' : ''}`}>
         {currentPage === 'login' && <Login />}
