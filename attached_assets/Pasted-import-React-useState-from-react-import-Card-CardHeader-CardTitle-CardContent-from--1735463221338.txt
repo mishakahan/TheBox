@@ -3,23 +3,16 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, ChevronRight, Sparkles } from 'lucide-react';
 
-const IdeaCard = ({ idea }: { idea: string }) => (
+const IdeaCard = ({ idea }) => (
   <Card className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
     <p className="text-gray-700">{idea}</p>
   </Card>
 );
 
-interface OpportunityCardProps {
-  title: string;
-  description: string;
-  ideas: string[];
-  index: number;
-}
-
-const OpportunityCard: React.FC<OpportunityCardProps> = ({ title, description, ideas, index }) => {
+const OpportunityCard = ({ title, description, image, ideas, index }) => {
   const [expanded, setExpanded] = useState(false);
-
-  const getImage = (index: number) => {
+  
+  const getImage = (index) => {
     switch(index) {
       case 0: return '/api/placeholder/400/300'; // AI Matchmaker image
       case 1: return '/api/placeholder/400/300'; // Nonna's Pistachio image
@@ -28,7 +21,7 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({ title, description, i
       default: return '/api/placeholder/400/300';
     }
   };
-
+  
   return (
     <Card className="w-full mb-8 overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="flex flex-row">
@@ -38,14 +31,14 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({ title, description, i
           </CardHeader>
           <CardContent className="p-0">
             <p className="text-gray-600 mb-6">{description}</p>
-
+            
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-3">
                 {ideas.slice(0, 3).map((idea, idx) => (
                   <IdeaCard key={idx} idea={idea} />
                 ))}
               </div>
-
+              
               {ideas.length > 3 && (
                 <div>
                   <Button 
@@ -56,7 +49,7 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({ title, description, i
                     {expanded ? 'Show less' : 'See more ideas'}
                     <ChevronRight className={`transform transition-transform ${expanded ? 'rotate-90' : ''}`} />
                   </Button>
-
+                  
                   {expanded && (
                     <div className="grid grid-cols-1 gap-3 mt-4">
                       {ideas.slice(3).map((idea, idx) => (
@@ -99,7 +92,7 @@ const GenerateOpportunityCard = () => (
   </Card>
 );
 
-const OpportunitiesView = () => {
+const OpportunitiesPage = () => {
   const opportunities = [
     {
       title: "Tech-Enhanced Taste: Personalized Gelato Experiences",
@@ -163,4 +156,5 @@ const OpportunitiesView = () => {
   );
 };
 
-export default OpportunitiesView;
+export default OpportunitiesPage;
+

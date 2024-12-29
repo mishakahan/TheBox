@@ -4,9 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useLocation } from 'wouter';
 
 const InsightsView = () => {
-  // Existing state
+  const [, setLocation] = useLocation();
+
   const [selectedCards, setSelectedCards] = useState({
     keyInsights: new Set([0, 1, 2, 3, 4]),
     news: new Set(Array.from({ length: 10 }, (_, i) => i)),
@@ -23,17 +25,15 @@ const InsightsView = () => {
     competitors: false
   });
 
-  // New state for the insight form
   const [newInsight, setNewInsight] = useState({
     title: '',
     content: ''
   });
 
-  // Add scroll handler for key insights
   const scrollKeyInsights = (direction: 'left' | 'right') => {
     const container = document.getElementById('key-insights-container');
     if (container) {
-      const scrollAmount = 400; // Width of one card
+      const scrollAmount = 400; 
       container.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -58,7 +58,6 @@ const InsightsView = () => {
       const currentSet = prev[section];
       const newSet = new Set();
       if (currentSet.size < totalItems) {
-        // Select all
         for (let i = 0; i < totalItems; i++) {
           newSet.add(i);
         }
@@ -140,9 +139,8 @@ const InsightsView = () => {
 
   const handleNewInsight = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would handle adding the new insight
     console.log('New insight:', newInsight);
-    setNewInsight({ title: '', content: '' }); // Reset form
+    setNewInsight({ title: '', content: '' }); 
   };
 
   const NewInsightDialog = () => (
@@ -190,7 +188,6 @@ const InsightsView = () => {
     <div className="max-w-7xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">Insights</h1>
 
-      {/* Project Summary */}
       <div className="bg-gray-50 p-4 rounded-lg mb-8">
         <p className="text-sm text-gray-600 mb-2">
           <span className="font-medium">Challenge:</span> Development of a Flagship Herbal Coffee Alternative for the German Market
@@ -203,7 +200,6 @@ const InsightsView = () => {
         </p>
       </div>
 
-      {/* Key Insights Section with horizontal scroll */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Key Insights</h2>
@@ -214,7 +210,10 @@ const InsightsView = () => {
             >
               {selectedCards.keyInsights.size === keyInsights.length ? 'Deselect All' : 'Select All'}
             </button>
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <button 
+              onClick={() => setLocation('/opportunities')}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
               Generate Opportunities
             </button>
           </div>
@@ -258,13 +257,11 @@ const InsightsView = () => {
         </div>
       </div>
 
-      {/* Category Sections */}
       <InsightSection title="News" insights={categoryInsights.news} section="news" />
       <InsightSection title="Trends" insights={categoryInsights.trends} section="trends" />
       <InsightSection title="Customers" insights={categoryInsights.customers} section="customers" />
       <InsightSection title="Competitors" insights={categoryInsights.competitors} section="competitors" />
 
-      {/* Patents and Academic Research Tables */}
       <div className="space-y-8 mt-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-xl font-bold mb-4">Patents Research</h3>
@@ -321,9 +318,11 @@ const InsightsView = () => {
         </div>
       </div>
 
-      {/* Bottom Generate Opportunities Button */}
       <div className="flex justify-center mt-8 mb-4">
-        <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        <button 
+          onClick={() => setLocation('/opportunities')}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
           Generate Opportunities
         </button>
       </div>
