@@ -3,7 +3,11 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-const CompanyEditForm = () => {
+interface CompanyEditFormProps {
+  setCurrentPage: (page: string) => void;
+}
+
+const CompanyEditForm: React.FC<CompanyEditFormProps> = ({ setCurrentPage }) => {
   const [formData, setFormData] = useState({
     company_name: "FLiPO Eyewear",
     sector: "Consumer Goods / Eyewear",
@@ -25,7 +29,10 @@ const CompanyEditForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    setTimeout(() => {
+      setShowSuccess(false);
+      setCurrentPage('dashboard');
+    }, 1500);
   };
 
   return (
@@ -43,7 +50,7 @@ const CompanyEditForm = () => {
                 </AlertDescription>
               </Alert>
             )}
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -113,7 +120,7 @@ const CompanyEditForm = () => {
               </div>
             </div>
           </CardContent>
-          
+
           <CardFooter className="flex justify-end space-x-4">
             <Button
               type="button"

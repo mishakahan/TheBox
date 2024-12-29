@@ -8,11 +8,6 @@ const DemoApp = () => {
   const [currentPage, setCurrentPage] = useState('login');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState([]);
-  const [expandedTables, setExpandedTables] = useState({
-    trends: true,
-    experts: true,
-    patents: true
-  });
 
   const defaultProjectInfo = {
     name: "Eco-Friendly Materials Development for FLiPO Eyewear",
@@ -23,16 +18,30 @@ const DemoApp = () => {
 
   const [currentProject, setCurrentProject] = useState(defaultProjectInfo);
 
+  const projects = [
+    {
+      name: "Eco-Materials Research",
+      description: "Analysis of sustainable materials for next-gen eyewear",
+      status: "In Progress"
+    },
+    {
+      name: "Market Analysis 2024",
+      description: "Competitive landscape and consumer trends",
+      status: "Completed"
+    }
+  ];
+
   const sourceOptions = [
-    { id: 'trends', label: 'Trends Analysis' },
-    { id: 'patents', label: 'Patents Research' },
+    { id: 'patents', label: 'Patents' },
     { id: 'academic', label: 'Academic Research' },
-    { id: 'experts', label: 'Expert Insights' },
-    { id: 'social', label: 'Social Media Analysis' },
-    { id: 'upload', label: 'Upload Source' }
+    { id: 'trends', label: 'News Trends' },
+    { id: 'customers', label: 'Customers' },
+    { id: 'competitors', label: 'Competitors' }
   ];
 
   const Sidebar = () => {
+    const [expandedProject, setExpandedProject] = useState<string | null>(null);
+
     return (
       <div className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out z-30`}>
         <div className="p-4">
@@ -40,34 +49,50 @@ const DemoApp = () => {
             <X size={24} />
           </button>
           <nav className="space-y-6">
-            <div className="space-y-2">
-              <button 
-                onClick={() => { setCurrentPage('dashboard'); setIsSidebarOpen(false); }}
-                className="flex items-center space-x-2 w-full p-2 hover:bg-gray-100 rounded"
-              >
-                <Home size={20} />
-                <span>Dashboard</span>
-              </button>
-            </div>
+            <button 
+              onClick={() => { setCurrentPage('dashboard'); setIsSidebarOpen(false); }}
+              className="flex items-center space-x-2 w-full p-2 hover:bg-gray-100 rounded"
+            >
+              <Home size={20} />
+              <span>Dashboard</span>
+            </button>
 
             <div className="space-y-2">
-              <div className="px-2 text-sm font-semibold text-gray-600">
-                {currentProject.name}
-              </div>
-              <button 
-                onClick={() => { setCurrentPage('insights'); setIsSidebarOpen(false); }}
-                className="flex items-center space-x-2 w-full p-2 hover:bg-gray-100 rounded pl-4"
-              >
-                <Lightbulb size={20} />
-                <span>Insights</span>
-              </button>
-              <button 
-                onClick={() => { setCurrentPage('opportunities'); setIsSidebarOpen(false); }}
-                className="flex items-center space-x-2 w-full p-2 hover:bg-gray-100 rounded pl-4"
-              >
-                <Target size={20} />
-                <span>Opportunities</span>
-              </button>
+              {projects.map((project) => (
+                <div key={project.name} className="space-y-1">
+                  <button
+                    onClick={() => setExpandedProject(expandedProject === project.name ? null : project.name)}
+                    className="flex items-center justify-between w-full p-2 hover:bg-gray-100 rounded text-sm"
+                  >
+                    <span className="truncate">{project.name}</span>
+                    <ChevronDown
+                      size={16}
+                      className={`transform transition-transform ${
+                        expandedProject === project.name ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {expandedProject === project.name && (
+                    <div className="pl-4 space-y-1">
+                      <button 
+                        onClick={() => { setCurrentPage('insights'); setIsSidebarOpen(false); }}
+                        className="flex items-center space-x-2 w-full p-2 hover:bg-gray-100 rounded text-sm"
+                      >
+                        <Lightbulb size={16} />
+                        <span>Insights</span>
+                      </button>
+                      <button 
+                        onClick={() => { setCurrentPage('opportunities'); setIsSidebarOpen(false); }}
+                        className="flex items-center space-x-2 w-full p-2 hover:bg-gray-100 rounded text-sm"
+                      >
+                        <Target size={16} />
+                        <span>Opportunities</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </nav>
         </div>
@@ -75,16 +100,14 @@ const DemoApp = () => {
     );
   };
 
-  const Header = () => {
-    return (
-      <div className="bg-white p-4 shadow-sm flex items-center">
-        <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-gray-100 rounded">
-          <Menu size={24} />
-        </button>
-        <h1 className="ml-4 text-xl font-semibold">Quartzium Innovate</h1>
-      </div>
-    );
-  };
+  const Header = () => (
+    <div className="bg-white p-4 shadow-sm flex items-center">
+      <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-gray-100 rounded">
+        <Menu size={24} />
+      </button>
+      <h1 className="ml-4 text-xl font-semibold">Quartzium Innovate</h1>
+    </div>
+  );
 
   const Login = () => {
     return (
@@ -112,153 +135,139 @@ const DemoApp = () => {
     );
   };
 
-  const Dashboard = () => {
-    return (
-      <div className="max-w-6xl mx-auto mt-10 p-6">
-        {/* Company Information Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-xl font-semibold">FLiPO Eyewear</h3>
-              <p className="text-gray-600 mt-1">Sector: Sustainable Fashion & Eyewear</p>
-            </div>
-            <button 
-              onClick={() => setCurrentPage('editCompany')}
-              className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
-            >
-              Edit
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
-
-        {/* Projects Section */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Projects</h2>
-            <button 
-              onClick={() => setCurrentPage('newProject')}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-            >
-              <FileText size={20} />
-              New Project
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold">Eco-Materials Research</h3>
-              <p className="text-gray-600 mt-2">Analysis of sustainable materials for next-gen eyewear</p>
-              <div className="mt-4">
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">In Progress</span>
-              </div>
-              <button 
-                onClick={() => setCurrentPage('insights')}
-                className="mt-4 text-blue-600 flex items-center gap-1"
-              >
-                View Insights
-                <ChevronRight size={16} />
-              </button>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold">Market Analysis 2024</h3>
-              <p className="text-gray-600 mt-2">Competitive landscape and consumer trends</p>
-              <div className="mt-4">
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Completed</span>
-              </div>
-              <button 
-                onClick={() => setCurrentPage('insights')}
-                className="mt-4 text-blue-600 flex items-center gap-1"
-              >
-                View Insights
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const NewProject = () => {
-    return (
-      <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6">New Project</h2>
-        <div className="space-y-4">
+  const Dashboard = () => (
+    <div className="max-w-6xl mx-auto mt-10 p-6">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="flex justify-between items-center">
           <div>
-            <label className="block text-sm font-medium mb-1">Project Name</label>
-            <input
-              defaultValue={defaultProjectInfo.name}
-              className="w-full p-2 border rounded"
-            />
+            <h3 className="text-xl font-semibold">FLiPO Eyewear</h3>
+            <p className="text-gray-600 mt-1">Sector: Sustainable Fashion & Eyewear</p>
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Challenge Description</label>
-            <textarea
-              defaultValue={defaultProjectInfo.description}
-              className="w-full p-2 border rounded"
-              rows={3}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Purpose</label>
-            <textarea
-              defaultValue={defaultProjectInfo.purpose}
-              className="w-full p-2 border rounded"
-              rows={3}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Focus/Constraints</label>
-            <textarea
-              defaultValue={defaultProjectInfo.constraints}
-              className="w-full p-2 border rounded"
-              rows={3}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="font-medium">Select Sources</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {sourceOptions.map((source) => (
-                <label key={source.id} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedSources.includes(source.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedSources([...selectedSources, source.id]);
-                      } else {
-                        setSelectedSources(selectedSources.filter(id => id !== source.id));
-                      }
-                    }}
-                    className="form-checkbox"
-                  />
-                  <span>{source.label}</span>
-                </label>
-              ))}
-            </div>
-            
-            {selectedSources.includes('upload') && (
-              <div className="mt-4 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="mt-2 text-sm text-gray-600">Drag and drop files here, or click to select files</p>
-                <input type="file" className="hidden" multiple />
-              </div>
-            )}
-          </div>
-
           <button 
-            onClick={() => setCurrentPage('insights')}
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+            onClick={() => setCurrentPage('editCompany')}
+            className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
           >
-            Generate Insights
+            Edit
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>
-    );
-  };
+
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Projects</h2>
+          <button 
+            onClick={() => setCurrentPage('newProject')}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <FileText size={20} />
+            New Project
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project) => (
+            <div key={project.name} className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold">{project.name}</h3>
+              <p className="text-gray-600 mt-2">{project.description}</p>
+              <div className="mt-4">
+                <span className={`px-3 py-1 ${
+                  project.status === 'In Progress' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                } rounded-full text-sm`}>
+                  {project.status}
+                </span>
+              </div>
+              <button 
+                onClick={() => setCurrentPage('insights')}
+                className="mt-4 text-blue-600 flex items-center gap-1"
+              >
+                View Insights
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const NewProject = () => (
+    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6">New Project</h2>
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium mb-1">Project Name</label>
+          <input
+            defaultValue={defaultProjectInfo.name}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Challenge Description</label>
+          <textarea
+            defaultValue={defaultProjectInfo.description}
+            className="w-full p-2 border rounded"
+            rows={3}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Purpose</label>
+          <textarea
+            defaultValue={defaultProjectInfo.purpose}
+            className="w-full p-2 border rounded"
+            rows={3}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Focus/Constraints</label>
+          <textarea
+            defaultValue={defaultProjectInfo.constraints}
+            className="w-full p-2 border rounded"
+            rows={3}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Upload Source</label>
+          <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+            <Upload className="mx-auto h-12 w-12 text-gray-400" />
+            <p className="mt-2 text-sm text-gray-600">Drag and drop files here, or click to select files</p>
+            <input type="file" className="hidden" multiple />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="font-medium">Select Sources</h3>
+          <div className="grid grid-cols-2 gap-4">
+            {sourceOptions.map((source) => (
+              <label key={source.id} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedSources.includes(source.id)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedSources([...selectedSources, source.id]);
+                    } else {
+                      setSelectedSources(selectedSources.filter(id => id !== source.id));
+                    }
+                  }}
+                  className="form-checkbox"
+                />
+                <span>{source.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <button 
+          onClick={() => setCurrentPage('insights')}
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+        >
+          Generate Insights
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -270,7 +279,7 @@ const DemoApp = () => {
         {currentPage === 'newProject' && <NewProject />}
         {currentPage === 'insights' && <InsightsView />}
         {currentPage === 'opportunities' && <OpportunitiesView />}
-        {currentPage === 'editCompany' && <CompanyEditForm />}
+        {currentPage === 'editCompany' && <CompanyEditForm setCurrentPage={setCurrentPage} />}
       </div>
     </div>
   );
