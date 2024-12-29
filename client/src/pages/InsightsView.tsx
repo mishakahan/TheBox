@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
 import { ChevronDown, Plus, Square, CheckSquare, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const InsightsView = () => {
-  // State for tracking selected cards in each section
+  // Existing state
   const [selectedCards, setSelectedCards] = useState({
-    keyInsights: new Set([0, 1, 2, 3, 4]), // All key insights selected by default
-    news: new Set(Array.from({ length: 10 }, (_, i) => i)), // 0-9 selected
+    keyInsights: new Set([0, 1, 2, 3, 4]),
+    news: new Set(Array.from({ length: 10 }, (_, i) => i)),
     trends: new Set(Array.from({ length: 10 }, (_, i) => i)),
     customers: new Set(Array.from({ length: 10 }, (_, i) => i)),
     competitors: new Set(Array.from({ length: 10 }, (_, i) => i))
   });
 
-  // State for tracking expanded sections
   const [expandedSections, setExpandedSections] = useState({
     keyInsights: false,
     news: false,
     trends: false,
     customers: false,
     competitors: false
+  });
+
+  // New state for the insight form
+  const [newInsight, setNewInsight] = useState({
+    title: '',
+    content: ''
   });
 
   // Add scroll handler for key insights
@@ -129,6 +138,54 @@ const InsightsView = () => {
     </div>
   );
 
+  const handleNewInsight = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Here you would handle adding the new insight
+    console.log('New insight:', newInsight);
+    setNewInsight({ title: '', content: '' }); // Reset form
+  };
+
+  const NewInsightDialog = () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="bg-white p-6 rounded-lg shadow-md w-[400px] shrink-0 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
+          <Plus className="w-8 h-8 text-gray-400 mb-2" />
+          <p className="text-gray-600 font-medium">Add New Key Insight</p>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add New Insight</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleNewInsight} className="space-y-4 mt-4">
+          <div>
+            <label className="text-sm font-medium mb-1 block">Title</label>
+            <Input
+              value={newInsight.title}
+              onChange={(e) => setNewInsight(prev => ({ ...prev, title: e.target.value }))}
+              placeholder="Enter insight title"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium mb-1 block">Content</label>
+            <Textarea
+              value={newInsight.content}
+              onChange={(e) => setNewInsight(prev => ({ ...prev, content: e.target.value }))}
+              placeholder="Enter insight content"
+              rows={4}
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <DialogTrigger asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogTrigger>
+            <Button type="submit">Add Insight</Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">Insights</h1>
@@ -183,10 +240,7 @@ const InsightsView = () => {
                   <p className="text-sm font-medium">Impact: {insight.impact}</p>
                 </div>
               ))}
-              <div className="bg-white p-6 rounded-lg shadow-md w-[400px] shrink-0 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
-                <Plus className="w-8 h-8 text-gray-400 mb-2" />
-                <p className="text-gray-600 font-medium">Add New Key Insight</p>
-              </div>
+              <NewInsightDialog />
             </div>
           </div>
           <button 

@@ -105,7 +105,9 @@ const DemoApp = () => {
       <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-gray-100 rounded">
         <Menu size={24} />
       </button>
-      <h1 className="ml-4 text-xl font-semibold">Quartzium Innovate</h1>
+      <h1 className="ml-4 text-xl font-semibold">
+        <span className="italic">TheBox</span> <span className="text-gray-500">by Quartz Labs</span>
+      </h1>
     </div>
   );
 
