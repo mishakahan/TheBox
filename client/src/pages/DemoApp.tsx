@@ -114,46 +114,65 @@ const DemoApp = () => {
   const Dashboard = () => {
     return (
       <div className="max-w-6xl mx-auto mt-10 p-6">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold">Dashboard</h2>
-          <button 
-            onClick={() => setCurrentPage('newProject')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-          >
-            <FileText size={20} />
-            New Project
-          </button>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold">Eco-Materials Research</h3>
-            <p className="text-gray-600 mt-2">Analysis of sustainable materials for next-gen eyewear</p>
-            <div className="mt-4">
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">In Progress</span>
+        {/* Company Information Section */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-xl font-semibold">FLiPO Eyewear</h3>
+              <p className="text-gray-600 mt-1">Sector: Sustainable Fashion & Eyewear</p>
             </div>
             <button 
-              onClick={() => setCurrentPage('insights')}
-              className="mt-4 text-blue-600 flex items-center gap-1"
+              className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
             >
-              View Insights
+              Edit
               <ChevronRight size={16} />
             </button>
           </div>
+        </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold">Market Analysis 2024</h3>
-            <p className="text-gray-600 mt-2">Competitive landscape and consumer trends</p>
-            <div className="mt-4">
-              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Completed</span>
-            </div>
+        {/* Projects Section */}
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold">Projects</h2>
             <button 
-              onClick={() => setCurrentPage('insights')}
-              className="mt-4 text-blue-600 flex items-center gap-1"
+              onClick={() => setCurrentPage('newProject')}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
             >
-              View Insights
-              <ChevronRight size={16} />
+              <FileText size={20} />
+              New Project
             </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold">Eco-Materials Research</h3>
+              <p className="text-gray-600 mt-2">Analysis of sustainable materials for next-gen eyewear</p>
+              <div className="mt-4">
+                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">In Progress</span>
+              </div>
+              <button 
+                onClick={() => setCurrentPage('insights')}
+                className="mt-4 text-blue-600 flex items-center gap-1"
+              >
+                View Insights
+                <ChevronRight size={16} />
+              </button>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold">Market Analysis 2024</h3>
+              <p className="text-gray-600 mt-2">Competitive landscape and consumer trends</p>
+              <div className="mt-4">
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Completed</span>
+              </div>
+              <button 
+                onClick={() => setCurrentPage('insights')}
+                className="mt-4 text-blue-600 flex items-center gap-1"
+              >
+                View Insights
+                <ChevronRight size={16} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
