@@ -13,6 +13,7 @@ const InsightsView = () => {
 
   // State for tracking expanded sections
   const [expandedSections, setExpandedSections] = useState({
+    keyInsights: false,
     news: false,
     trends: false,
     customers: false,
@@ -79,24 +80,15 @@ const InsightsView = () => {
     <div className="mb-8">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold capitalize">{title}</h3>
-        <div className="flex gap-2">
-          <button 
-            onClick={() => toggleSelectAll(section, insights.length)}
-            className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg"
-          >
-            {selectedCards[section].size === insights.length ? 'Deselect All' : 'Select All'}
-          </button>
-          <button 
-            onClick={() => toggleSectionExpand(section)}
-            className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-1"
-          >
-            {expandedSections[section] ? 'Show Less' : 'View More'}
-            <ChevronDown className={`transform transition-transform ${expandedSections[section] ? 'rotate-180' : ''}`} />
-          </button>
-        </div>
+        <button 
+          onClick={() => toggleSelectAll(section, insights.length)}
+          className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg"
+        >
+          {selectedCards[section].size === insights.length ? 'Deselect All' : 'Select All'}
+        </button>
       </div>
       <div className="overflow-x-auto">
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 mb-4">
           {insights.slice(0, expandedSections[section] ? undefined : 3).map((insight, index) => (
             <div key={index} className="bg-white p-4 rounded-lg shadow-sm w-[300px] relative">
               <button
@@ -115,6 +107,13 @@ const InsightsView = () => {
             </div>
           ))}
         </div>
+        <button 
+          onClick={() => toggleSectionExpand(section)}
+          className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mx-auto"
+        >
+          {expandedSections[section] ? 'Show Less' : 'View More'}
+          <ChevronDown className={`transform transition-transform ${expandedSections[section] ? 'rotate-180' : ''}`} />
+        </button>
       </div>
     </div>
   );
@@ -152,9 +151,9 @@ const InsightsView = () => {
             </button>
           </div>
         </div>
-        <div className="relative">
+        <div className="relative mb-4">
           <div className="flex flex-wrap gap-6">
-            {keyInsights.map((insight, index) => (
+            {keyInsights.slice(0, expandedSections.keyInsights ? undefined : 1).map((insight, index) => (
               <div key={index} className="bg-white p-6 rounded-lg shadow-md w-[400px] relative">
                 <button
                   onClick={() => toggleCardSelection('keyInsights', index)}
@@ -178,6 +177,13 @@ const InsightsView = () => {
             </div>
           </div>
         </div>
+        <button 
+          onClick={() => toggleSectionExpand('keyInsights')}
+          className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mx-auto"
+        >
+          {expandedSections.keyInsights ? 'Show Less' : 'View More'}
+          <ChevronDown className={`transform transition-transform ${expandedSections.keyInsights ? 'rotate-180' : ''}`} />
+        </button>
       </div>
 
       {/* Category Sections */}
