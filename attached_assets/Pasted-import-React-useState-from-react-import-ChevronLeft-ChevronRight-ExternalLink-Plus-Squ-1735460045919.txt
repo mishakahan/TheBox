@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronDown, Plus, Square, CheckSquare } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Plus, Square, CheckSquare } from 'lucide-react';
 
-const InsightsView = () => {
+const InsightsPage = () => {
   // State for tracking selected cards in each section
   const [selectedCards, setSelectedCards] = useState({
     news: new Set(),
@@ -10,7 +10,7 @@ const InsightsView = () => {
     competitors: new Set()
   });
 
-  const toggleCardSelection = (section: string, index: number) => {
+  const toggleCardSelection = (section, index) => {
     setSelectedCards(prev => {
       const newSet = new Set(prev[section]);
       if (newSet.has(index)) {
@@ -22,7 +22,7 @@ const InsightsView = () => {
     });
   };
 
-  const toggleSelectAll = (section: string, totalItems: number) => {
+  const toggleSelectAll = (section, totalItems) => {
     setSelectedCards(prev => {
       const currentSet = prev[section];
       const newSet = new Set();
@@ -117,7 +117,9 @@ const InsightsView = () => {
     }
   ];
 
-  const InsightSection = ({ title, insights, section }: { title: string, insights: any[], section: string }) => (
+  // ... (keep the rest of the data - expertsResearch and patents - unchanged)
+
+  const InsightSection = ({ title, insights, section }) => (
     <div className="mb-8">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold capitalize">{title}</h3>
@@ -155,7 +157,7 @@ const InsightsView = () => {
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">Insights</h1>
-
+      
       {/* Project Summary */}
       <div className="bg-gray-50 p-4 rounded-lg mb-8">
         <p className="text-sm text-gray-600 mb-2">
@@ -202,6 +204,8 @@ const InsightsView = () => {
       <InsightSection title="Customers" insights={categoryInsights.customers} section="customers" />
       <InsightSection title="Competitors" insights={categoryInsights.competitors} section="competitors" />
 
+      {/* ... (keep the experts and patents tables unchanged) */}
+
       {/* Bottom Generate Opportunities Button */}
       <div className="flex justify-center mt-8 mb-4">
         <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
@@ -212,4 +216,4 @@ const InsightsView = () => {
   );
 };
 
-export default InsightsView;
+export default InsightsPage;
