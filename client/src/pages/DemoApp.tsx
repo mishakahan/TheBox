@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft, Menu, X, Home, FileText, Lightbulb, Settings, Upload, ChevronDown, Target } from 'lucide-react';
 import InsightsView from './InsightsView';
 import OpportunitiesView from './OpportunitiesView';
+import CompanyEditForm from './CompanyEditForm';
 
 const DemoApp = () => {
   const [currentPage, setCurrentPage] = useState('login');
@@ -122,6 +123,7 @@ const DemoApp = () => {
               <p className="text-gray-600 mt-1">Sector: Sustainable Fashion & Eyewear</p>
             </div>
             <button 
+              onClick={() => setCurrentPage('editCompany')}
               className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
             >
               Edit
@@ -268,6 +270,7 @@ const DemoApp = () => {
         {currentPage === 'newProject' && <NewProject />}
         {currentPage === 'insights' && <InsightsView />}
         {currentPage === 'opportunities' && <OpportunitiesView />}
+        {currentPage === 'editCompany' && <CompanyEditForm />}
       </div>
     </div>
   );
