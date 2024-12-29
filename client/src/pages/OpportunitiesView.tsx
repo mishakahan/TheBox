@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, ChevronRight, Sparkles } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface IdeaWithDetails {
   title: string;
@@ -93,14 +96,61 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({ title, description, i
   );
 };
 
-const AddOpportunityCard = () => (
-  <Card className="w-full h-48 mb-6 flex items-center justify-center hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-gray-50">
-    <div className="text-center">
-      <Plus className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-      <p className="text-lg font-medium text-gray-600">Add New Opportunity</p>
-    </div>
-  </Card>
-);
+const AddOpportunityCard = () => {
+  const [newOpportunity, setNewOpportunity] = useState({
+    title: '',
+    description: ''
+  });
+
+  const handleNewOpportunity = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('New opportunity:', newOpportunity);
+    setNewOpportunity({ title: '', description: '' });
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Card className="w-full h-48 mb-6 flex items-center justify-center hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-gray-50">
+          <div className="text-center">
+            <Plus className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+            <p className="text-lg font-medium text-gray-600">Add New Opportunity</p>
+          </div>
+        </Card>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add New Opportunity</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleNewOpportunity} className="space-y-4 mt-4">
+          <div>
+            <label className="text-sm font-medium mb-1 block">Title</label>
+            <Input
+              value={newOpportunity.title}
+              onChange={(e) => setNewOpportunity(prev => ({ ...prev, title: e.target.value }))}
+              placeholder="Enter opportunity title"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium mb-1 block">Description</label>
+            <Textarea
+              value={newOpportunity.description}
+              onChange={(e) => setNewOpportunity(prev => ({ ...prev, description: e.target.value }))}
+              placeholder="Enter opportunity description"
+              rows={4}
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <DialogTrigger asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogTrigger>
+            <Button type="submit">Add Opportunity</Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const GenerateOpportunityCard = () => (
   <Card className="w-full h-48 mb-6 flex items-center justify-center hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-blue-50">

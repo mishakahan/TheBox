@@ -4,11 +4,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useLocation } from 'wouter';
 
-const InsightsView = () => {
-  const [, setLocation] = useLocation();
+interface InsightsViewProps {
+  setCurrentPage: (page: string) => void;
+}
 
+const InsightsView: React.FC<InsightsViewProps> = ({ setCurrentPage }) => {
   const [selectedCards, setSelectedCards] = useState({
     keyInsights: new Set([0, 1, 2, 3, 4]),
     news: new Set(Array.from({ length: 10 }, (_, i) => i)),
@@ -185,7 +186,7 @@ const InsightsView = () => {
   );
 
   const navigateToOpportunities = () => {
-    setLocation('/opportunities');
+    setCurrentPage('opportunities');
   };
 
   return (

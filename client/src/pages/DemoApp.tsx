@@ -279,7 +279,7 @@ const DemoApp = () => {
         {currentPage === 'login' && <Login />}
         {currentPage === 'dashboard' && <Dashboard />}
         {currentPage === 'newProject' && <NewProject />}
-        {currentPage === 'insights' && <InsightsView />}
+        {currentPage === 'insights' && <InsightsView setCurrentPage={setCurrentPage} />}
         {currentPage === 'opportunities' && <OpportunitiesView />}
         {currentPage === 'editCompany' && <CompanyEditForm setCurrentPage={setCurrentPage} />}
       </div>
