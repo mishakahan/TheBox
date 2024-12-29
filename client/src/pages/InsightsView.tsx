@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Plus, Square, CheckSquare } from 'lucide-react';
+import { ChevronDown, Plus, Square, CheckSquare, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const InsightsView = () => {
   // State for tracking selected cards in each section
@@ -19,6 +19,18 @@ const InsightsView = () => {
     customers: false,
     competitors: false
   });
+
+  // Add scroll handler for key insights
+  const scrollKeyInsights = (direction: 'left' | 'right') => {
+    const container = document.getElementById('key-insights-container');
+    if (container) {
+      const scrollAmount = 400; // Width of one card
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   const toggleCardSelection = (section: string, index: number) => {
     setSelectedCards(prev => {
@@ -61,7 +73,6 @@ const InsightsView = () => {
     impact: "Strong market potential for herbal coffee alternatives that maintain traditional coffee rituals."
   }));
 
-  // Generate 10 items for each category
   const generateItems = (prefix: string) => Array(10).fill(null).map((_, index) => ({
     title: `${prefix} ${index + 1}`,
     content: `Sample content for ${prefix.toLowerCase()} item ${index + 1}. This provides valuable insights for the project.`,
@@ -151,8 +162,8 @@ const InsightsView = () => {
             </button>
           </div>
         </div>
-        <div className="relative">
-          <div className="overflow-x-auto">
+        <div className="relative group">
+          <div className="overflow-x-auto" id="key-insights-container">
             <div className="flex space-x-6 pb-4 min-w-full">
               {keyInsights.map((insight, index) => (
                 <div key={index} className="bg-white p-6 rounded-lg shadow-md w-[400px] shrink-0 relative">
@@ -178,14 +189,19 @@ const InsightsView = () => {
               </div>
             </div>
           </div>
+          <button 
+            onClick={() => scrollKeyInsights('left')} 
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <ChevronLeft className="w-6 h-6 text-gray-600" />
+          </button>
+          <button 
+            onClick={() => scrollKeyInsights('right')} 
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <ChevronRight className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
-        <button 
-          onClick={() => toggleSectionExpand('keyInsights')}
-          className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mx-auto"
-        >
-          {expandedSections.keyInsights ? 'Show Less' : 'View More'}
-          <ChevronDown className={`transform transition-transform ${expandedSections.keyInsights ? 'rotate-180' : ''}`} />
-        </button>
       </div>
 
       {/* Category Sections */}
@@ -193,6 +209,63 @@ const InsightsView = () => {
       <InsightSection title="Trends" insights={categoryInsights.trends} section="trends" />
       <InsightSection title="Customers" insights={categoryInsights.customers} section="customers" />
       <InsightSection title="Competitors" insights={categoryInsights.competitors} section="competitors" />
+
+      {/* Patents and Academic Research Tables */}
+      <div className="space-y-8 mt-8">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-bold mb-4">Patents Research</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-3 px-4">Patent ID</th>
+                  <th className="text-left py-3 px-4">Title</th>
+                  <th className="text-left py-3 px-4">Assignee</th>
+                  <th className="text-left py-3 px-4">Relevance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array(5).fill(null).map((_, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="py-3 px-4">PAT{String(index + 1).padStart(6, '0')}</td>
+                    <td className="py-3 px-4">Eco-friendly Material Processing Method</td>
+                    <td className="py-3 px-4">Sustainable Materials Corp</td>
+                    <td className="py-3 px-4">High</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-bold mb-4">Academic Research</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-3 px-4">Paper Title</th>
+                  <th className="text-left py-3 px-4">Authors</th>
+                  <th className="text-left py-3 px-4">Journal</th>
+                  <th className="text-left py-3 px-4">Year</th>
+                  <th className="text-left py-3 px-4">Key Findings</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array(5).fill(null).map((_, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="py-3 px-4">Sustainable Materials in Eyewear</td>
+                    <td className="py-3 px-4">Smith et al.</td>
+                    <td className="py-3 px-4">Journal of Sustainable Materials</td>
+                    <td className="py-3 px-4">2024</td>
+                    <td className="py-3 px-4">Novel bio-based polymer with high durability</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       {/* Bottom Generate Opportunities Button */}
       <div className="flex justify-center mt-8 mb-4">
