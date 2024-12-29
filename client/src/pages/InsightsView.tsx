@@ -135,7 +135,7 @@ const InsightsView = () => {
         </p>
       </div>
 
-      {/* Key Insights Section */}
+      {/* Key Insights Section with horizontal scroll */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Key Insights</h2>
@@ -151,29 +151,31 @@ const InsightsView = () => {
             </button>
           </div>
         </div>
-        <div className="relative mb-4">
-          <div className="flex flex-wrap gap-6">
-            {keyInsights.slice(0, expandedSections.keyInsights ? undefined : 1).map((insight, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md w-[400px] relative">
-                <button
-                  onClick={() => toggleCardSelection('keyInsights', index)}
-                  className="absolute top-4 right-4"
-                >
-                  {selectedCards.keyInsights.has(index) ? 
-                    <CheckSquare className="w-5 h-5 text-blue-600" /> : 
-                    <Square className="w-5 h-5 text-gray-400" />
-                  }
-                </button>
-                <div className="text-sm text-blue-600 mb-2">{insight.category}</div>
-                <h3 className="font-bold mb-3 pr-8">{insight.title}</h3>
-                <p className="text-gray-600 mb-4">{insight.content}</p>
-                <p className="text-sm text-gray-500 mb-2">Sources: {insight.sources}</p>
-                <p className="text-sm font-medium">Impact: {insight.impact}</p>
+        <div className="relative">
+          <div className="overflow-x-auto">
+            <div className="flex space-x-6 pb-4 min-w-full">
+              {keyInsights.map((insight, index) => (
+                <div key={index} className="bg-white p-6 rounded-lg shadow-md w-[400px] shrink-0 relative">
+                  <button
+                    onClick={() => toggleCardSelection('keyInsights', index)}
+                    className="absolute top-4 right-4"
+                  >
+                    {selectedCards.keyInsights.has(index) ? 
+                      <CheckSquare className="w-5 h-5 text-blue-600" /> : 
+                      <Square className="w-5 h-5 text-gray-400" />
+                    }
+                  </button>
+                  <div className="text-sm text-blue-600 mb-2">{insight.category}</div>
+                  <h3 className="font-bold mb-3 pr-8">{insight.title}</h3>
+                  <p className="text-gray-600 mb-4">{insight.content}</p>
+                  <p className="text-sm text-gray-500 mb-2">Sources: {insight.sources}</p>
+                  <p className="text-sm font-medium">Impact: {insight.impact}</p>
+                </div>
+              ))}
+              <div className="bg-white p-6 rounded-lg shadow-md w-[400px] shrink-0 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
+                <Plus className="w-8 h-8 text-gray-400 mb-2" />
+                <p className="text-gray-600 font-medium">Add New Key Insight</p>
               </div>
-            ))}
-            <div className="bg-white p-6 rounded-lg shadow-md w-[400px] border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
-              <Plus className="w-8 h-8 text-gray-400 mb-2" />
-              <p className="text-gray-600 font-medium">Add New Key Insight</p>
             </div>
           </div>
         </div>
