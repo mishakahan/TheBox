@@ -194,83 +194,163 @@ const DemoApp = () => {
     </div>
   );
 
-  const NewProject = () => (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">New Project</h2>
-      <div className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium mb-1">Project Name</label>
-          <input
-            defaultValue={defaultProjectInfo.name}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Challenge Description</label>
-          <textarea
-            defaultValue={defaultProjectInfo.description}
-            className="w-full p-2 border rounded"
-            rows={3}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Purpose</label>
-          <textarea
-            defaultValue={defaultProjectInfo.purpose}
-            className="w-full p-2 border rounded"
-            rows={3}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Focus/Constraints</label>
-          <textarea
-            defaultValue={defaultProjectInfo.constraints}
-            className="w-full p-2 border rounded"
-            rows={3}
-          />
-        </div>
+  const NewProject = () => {
+    const [dragActive, setDragActive] = useState(false);
+    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Upload Source</label>
-          <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-            <Upload className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-2 text-sm text-gray-600">Drag and drop files here, or click to select files</p>
-            <input type="file" className="hidden" multiple />
+    const handleDrag = (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.type === "dragenter" || e.type === "dragover") {
+        setDragActive(true);
+      } else if (e.type === "dragleave") {
+        setDragActive(false);
+      }
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFiles(Array.from(e.dataTransfer.files));
+      }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      if (e.target.files && e.target.files[0]) {
+        handleFiles(Array.from(e.target.files));
+      }
+    };
+
+    const handleFiles = (files: File[]) => {
+      setUploadedFiles(prev => [...prev, ...files]);
+    };
+
+    const onButtonClick = () => {
+      fileInputRef.current?.click();
+    };
+
+    return (
+      <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6">New Project</h2>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium mb-1">Project Name</label>
+            <input
+              defaultValue={defaultProjectInfo.name}
+              className="w-full p-2 border rounded"
+            />
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="font-medium">Select Sources</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {sourceOptions.map((source) => (
-              <label key={source.id} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={selectedSources.includes(source.id)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedSources([...selectedSources, source.id]);
-                    } else {
-                      setSelectedSources(selectedSources.filter(id => id !== source.id));
-                    }
-                  }}
-                  className="form-checkbox"
-                />
-                <span>{source.label}</span>
-              </label>
-            ))}
+          <div>
+            <label className="block text-sm font-medium mb-1">Challenge Description</label>
+            <textarea
+              defaultValue={defaultProjectInfo.description}
+              className="w-full p-2 border rounded"
+              rows={3}
+            />
           </div>
-        </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Purpose</label>
+            <textarea
+              defaultValue={defaultProjectInfo.purpose}
+              className="w-full p-2 border rounded"
+              rows={3}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Focus/Constraints</label>
+            <textarea
+              defaultValue={defaultProjectInfo.constraints}
+              className="w-full p-2 border rounded"
+              rows={3}
+            />
+          </div>
 
-        <button 
-          onClick={() => setCurrentPage('insights')}
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          Generate Insights
-        </button>
+          <div>
+            <label className="block text-sm font-medium mb-1">Upload Source</label>
+            <div 
+              className={`mt-2 border-2 ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'} ${
+                dragActive ? '' : 'border-dashed'
+              } rounded-lg p-6 text-center relative`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                className="hidden"
+                multiple
+                onChange={handleChange}
+              />
+              <Upload className="mx-auto h-12 w-12 text-gray-400" />
+              <p className="mt-2 text-sm text-gray-600">
+                {dragActive ? (
+                  "Drop files here..."
+                ) : (
+                  <>
+                    Drag and drop files here, or{" "}
+                    <button
+                      onClick={onButtonClick}
+                      className="text-blue-600 hover:text-blue-700"
+                    >
+                      browse
+                    </button>
+                  </>
+                )}
+              </p>
+              {uploadedFiles.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  <p className="text-sm font-medium">Uploaded files:</p>
+                  {uploadedFiles.map((file, index) => (
+                    <div key={index} className="text-sm text-gray-600 flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-500" />
+                      {file.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="font-medium">Select Sources</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {sourceOptions.map((source) => (
+                <label key={source.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedSources.includes(source.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedSources([...selectedSources, source.id]);
+                      } else {
+                        setSelectedSources(selectedSources.filter(id => id !== source.id));
+                      }
+                    }}
+                    className="form-checkbox"
+                  />
+                  <span>{source.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <button 
+            onClick={() => setCurrentPage('insights')}
+            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          >
+            Generate Insights
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
